@@ -8,7 +8,7 @@ import (
 type Workout struct {
 	gorm.Model
 	WorkoutID   string `gorm:"unique" json:"workoutID"`
-	WorkoutName   string `json:"workoutName"`
+	WorkoutName   string  `gorm:"unique" json:"workoutName"`
 	EnergySystemName   string `json:"energySystemName"`
 	Synopsis   string `json:"synopsis"`
 	LongDescription   string `json:"longDescription"`
