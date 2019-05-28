@@ -31,7 +31,9 @@ func (a *App) Initialize(config *config.Config) {
 		log.Fatal("Could not connect database")
 	}
  
-	a.DB = model.DBMigrate(db)
+	a.DB = model.DBMigrateWorkout(db)
+	a.DB = model.DBMigrateUser(db)
+	a.DB = model.DBMigrateSession(db)
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }

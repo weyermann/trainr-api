@@ -29,7 +29,7 @@ func (p *Workout) Enable() {
 }
 
 // DBMigrate will create and migrate the tables, and then make the some relationships if necessary
-func DBMigrate(db *gorm.DB) *gorm.DB {
+func DBMigrateWorkout(db *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&Workout{})
 	return db
 }
