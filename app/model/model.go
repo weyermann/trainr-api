@@ -10,9 +10,12 @@ type Workout struct {
 	WorkoutID   string `gorm:"unique" json:"workoutID"`
 	WorkoutName   string  `gorm:"unique" json:"workoutName"`
 	EnergySystemName   string `json:"energySystemName"`
+	EnergySubtypeName string `json:"energySubtypeName"`
 	Synopsis   string `json:"synopsis"`
+	ShortDescription string `json:"shortDescription"`
 	LongDescription   string `json:"longDescription"`
 	Facility   string `json:"facility"`
+	FacilityOpt   string `json:"facility_opt"`
 	Duration    int    `json:"duration"`
 	Active 	bool	`json:"active"`
 }
