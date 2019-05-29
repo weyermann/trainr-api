@@ -6,13 +6,13 @@ import (
 )
 
 type WorkoutExecution struct {
-	ID int `gorm:"auto_increment, primary_key" json:"workoutExecutionID"`
+	ID int `gorm:"auto_increment, primary_key" json:"id"`
 	// References
 	// WorkoutExecutionInfo belongs to one workout
 	WorkoutID int     `json:"workoutID"` // Foreign key
 	Workout   Workout // the referenced workout: WorkoutExecution belongs to exactly one workout
 
-	SessionID int // ExecutionInfo references exactly one session. A session can have many workoutExecutions
+	SessionID int `json:"sessionID"` // ExecutionInfo references exactly one session. A session can have many workoutExecutions
 
 	// Execution parameters - Initially with the workout default settings, changed when done
 	NumberOfSets                   int `json:"numberOfSets"`

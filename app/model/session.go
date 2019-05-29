@@ -8,13 +8,13 @@ import (
 )
 
 type Session struct {
-	ID int `gorm:"auto_increment, primary_key" json:"sessionID"`
+	ID int `gorm:"auto_increment, primary_key" json:"id"`
 
 	// References
-	UserID int `json:"workoutID"` // Foreign key
+	UserID int `json:"userID"` // Foreign key
 	// User User // the referenced user - Session belongs to exactly one user
 
-	StartTime             time.Time `json:"start_time"`
+	StartTime             time.Time `gorm:"default:current_timestamp" json:"startTime"`
 	WorkoutExecutionInfos []WorkoutExecution
 }
 

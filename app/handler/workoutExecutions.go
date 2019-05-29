@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -36,6 +37,24 @@ func GetExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	respondJSON(w, http.StatusOK, execution)
+}
+
+// CreateWorkout creates a new workout
+func CreateExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	execution := model.WorkoutExecution{}
+
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&execution); err != nil {
+		respondError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	defer r.Body.Close()
+
+	if err := db.Save(&execution).Error; err != nil {
+		respondError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	respondJSON(w, http.StatusCreated, execution)
 }
 
 // getSessionOr404 gets a session instance if exists, or respond the 404 error otherwise

@@ -6,7 +6,7 @@ import (
 )
 
 type Workout struct {
-	ID int `gorm:"auto_increment, primary_key" json:"workoutID"`
+	ID int `gorm:"auto_increment, primary_key" json:"id"`
 
 	WorkoutName       string `gorm:"unique" json:"workoutName"`
 	EnergySystemName  string `json:"energySystemName"`

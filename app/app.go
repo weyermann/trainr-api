@@ -59,7 +59,7 @@ func (a *App) setRouters() {
 
 	// WorkoutExecution
 	a.Get("/executions", a.GetAllExecutions) // Executions per Session (and per User)
-	// a.Post("/executions", a.CreateExecution)
+	a.Post("/executions", a.CreateExecution)
 	a.Get("/executions/{id}", a.GetExecution)
 	// a.Put("/executions/{id}", a.UpdateExecution)
 	// a.Delete("/executions/{id}", a.DeleteExecution)
@@ -140,9 +140,9 @@ func (a *App) GetAllExecutions(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllExecutions(a.DB, w, r)
 }
 
-// func (a *App) CreateExecutions(w http.ResponseWriter, r *http.Request) {
-// 	handler.CreateExecutions(a.DB, w, r)
-// }
+func (a *App) CreateExecution(w http.ResponseWriter, r *http.Request) {
+	handler.CreateExecution(a.DB, w, r)
+}
 
 func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
 	handler.GetExecution(a.DB, w, r)
