@@ -34,6 +34,7 @@ func (a *App) Initialize(config *config.Config) {
 	a.DB = model.DBMigrateWorkout(db)
 	a.DB = model.DBMigrateUser(db)
 	a.DB = model.DBMigrateSession(db)
+	a.DB = model.DBMigrateWorkoutExecutionInfo(db)
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
