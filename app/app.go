@@ -41,8 +41,8 @@ func (a *App) Initialize(config *config.Config) {
 
 // Set all required routers
 func (a *App) setRouters() {
-	// Workouts
-	a.Get("/workouts", a.GetAllWorkouts)
+	// Workout
+	a.Get("/workouts", a.GetAllWorkouts) // Workouts per User
 	a.Post("/workouts", a.CreateWorkout)
 	a.Get("/workouts/{id}", a.GetWorkout)
 	a.Put("/workouts/{id}", a.UpdateWorkout)
@@ -50,12 +50,19 @@ func (a *App) setRouters() {
 	a.Put("/workouts/{id}/disable", a.DisableWorkout)
 	a.Put("/workouts/{id}/enable", a.EnableWorkout)
 
-	// Sessions
-	a.Get("/sessions", a.GetAllSessions)
+	// Session
+	a.Get("/sessions", a.GetAllSessions) // Sessions per User
 	a.Post("/sessions", a.CreateSession)
 	a.Get("/sessions/{id}", a.GetSession)
 	a.Put("/sessions/{id}", a.UpdateSession)
 	a.Delete("/sessions/{id}", a.DeleteSession)
+
+	// WorkoutExecution
+	a.Get("/executions", a.GetAllExecutions) // Executions per Session (and per User)
+	// a.Post("/executions", a.CreateExecution)
+	a.Get("/executions/{id}", a.GetExecution)
+	// a.Put("/executions/{id}", a.UpdateExecution)
+	// a.Delete("/executions/{id}", a.DeleteExecution)
 }
 
 // Wrap the router for GET method
@@ -127,6 +134,27 @@ func (a *App) UpdateSession(w http.ResponseWriter, r *http.Request) {
 func (a *App) DeleteSession(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteSession(a.DB, w, r)
 }
+
+// Handlers to manage Execution Data
+func (a *App) GetAllExecutions(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllExecutions(a.DB, w, r)
+}
+
+// func (a *App) CreateExecutions(w http.ResponseWriter, r *http.Request) {
+// 	handler.CreateExecutions(a.DB, w, r)
+// }
+
+func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
+	handler.GetExecution(a.DB, w, r)
+}
+
+// func (a *App) UpdateSession(w http.ResponseWriter, r *http.Request) {
+// 	handler.UpdateSession(a.DB, w, r)
+// }
+
+// func (a *App) DeleteSession(w http.ResponseWriter, r *http.Request) {
+// 	handler.DeleteSession(a.DB, w, r)
+// }
 
 // Run the app on it's router
 func (a *App) Run(host string) {

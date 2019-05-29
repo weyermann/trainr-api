@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -38,7 +39,10 @@ func CreateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func GetWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID := vars["workoutID"]
+	workoutID, err := strconv.Atoi(vars["workoutID"])
+	if err != nil {
+		return
+	}
 	workout := getWorkoutOr404(db, workoutID, w, r)
 	if workout == nil {
 		return
@@ -50,7 +54,10 @@ func GetWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func UpdateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID := vars["workoutID"]
+	workoutID, err := strconv.Atoi(vars["workoutID"])
+	if err != nil {
+		return
+	}
 	workout := getWorkoutOr404(db, workoutID, w, r)
 	if workout == nil {
 		return
@@ -74,7 +81,10 @@ func UpdateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func DeleteWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID := vars["workoutID"]
+	workoutID, err := strconv.Atoi(vars["workoutID"])
+	if err != nil {
+		return
+	}
 	workout := getWorkoutOr404(db, workoutID, w, r)
 	if workout == nil {
 		return
@@ -90,7 +100,10 @@ func DeleteWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func DisableWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID := vars["workoutID"]
+	workoutID, err := strconv.Atoi(vars["workoutID"])
+	if err != nil {
+		return
+	}
 	workout := getWorkoutOr404(db, workoutID, w, r)
 	if workout == nil {
 		return
@@ -107,7 +120,10 @@ func DisableWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func EnableWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID := vars["workoutID"]
+	workoutID, err := strconv.Atoi(vars["workoutID"])
+	if err != nil {
+		return
+	}
 	workout := getWorkoutOr404(db, workoutID, w, r)
 	if workout == nil {
 		return
@@ -121,9 +137,9 @@ func EnableWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 // getWorkoutOr404 gets a workout instance if exists, or respond the 404 error otherwise
-func getWorkoutOr404(db *gorm.DB, workoutID string, w http.ResponseWriter, r *http.Request) *model.Workout {
+func getWorkoutOr404(db *gorm.DB, workoutID int, w http.ResponseWriter, r *http.Request) *model.Workout {
 	workout := model.Workout{}
-	if err := db.First(&workout, model.Workout{WorkoutID: workoutID}).Error; err != nil {
+	if err := db.First(&workout, model.Workout{ID: workoutID}).Error; err != nil {
 		respondError(w, http.StatusNotFound, err.Error())
 		return nil
 	}

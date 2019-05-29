@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
@@ -27,7 +28,10 @@ func GetAllSessions(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func GetSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	sessionID := vars["sessionID"]
+	sessionID, err := strconv.Atoi(vars["sessionID"])
+	if err != nil {
+		return
+	}
 	session := getSessionOr404(db, sessionID, w, r)
 	if session == nil {
 		return
@@ -57,7 +61,10 @@ func CreateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func UpdateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	sessionID := vars["sessionID"]
+	sessionID, err := strconv.Atoi(vars["sessionID"])
+	if err != nil {
+		return
+	}
 	session := getSessionOr404(db, sessionID, w, r)
 	if session == nil {
 		return
@@ -81,7 +88,10 @@ func UpdateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func DeleteSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	sessionID := vars["sessionID"]
+	sessionID, err := strconv.Atoi(vars["sessionID"])
+	if err != nil {
+		return
+	}
 	session := getSessionOr404(db, sessionID, w, r)
 	if session == nil {
 		return
@@ -95,9 +105,9 @@ func DeleteSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 }
 
 // getSessionOr404 gets a session instance if exists, or respond the 404 error otherwise
-func getSessionOr404(db *gorm.DB, sessionID string, w http.ResponseWriter, r *http.Request) *model.Session {
+func getSessionOr404(db *gorm.DB, sessionID int, w http.ResponseWriter, r *http.Request) *model.Session {
 	session := model.Session{}
-	if err := db.First(&session, model.Session{SessionID: sessionID}).Error; err != nil {
+	if err := db.First(&session, model.Session{ID: sessionID}).Error; err != nil {
 		respondError(w, http.StatusNotFound, err.Error())
 		return nil
 	}

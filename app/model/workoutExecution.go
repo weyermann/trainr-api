@@ -6,8 +6,7 @@ import (
 )
 
 type WorkoutExecution struct {
-	gorm.Model
-
+	ID int `gorm:"auto_increment, primary_key" json:"workoutExecutionID"`
 	// References
 	// WorkoutExecutionInfo belongs to one workout
 	WorkoutID int     `json:"workoutID"` // Foreign key

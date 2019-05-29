@@ -6,8 +6,8 @@ import (
 )
 
 type Workout struct {
-	gorm.Model
-	WorkoutID         string `gorm:"unique" json:"workoutID"`
+	ID int `gorm:"auto_increment, primary_key" json:"workoutID"`
+
 	WorkoutName       string `gorm:"unique" json:"workoutName"`
 	EnergySystemName  string `json:"energySystemName"`
 	EnergySubtypeName string `json:"energySubtypeName"`

@@ -6,12 +6,12 @@ import (
 )
 
 type User struct {
-	gorm.Model
-	UserID   string `gorm:"unique" json:"userID"`
-	Email   string  `gorm:"unique" json:"email"`
-	Nickname   string `json:"nickname"`
+	ID int `gorm:"auto_increment, primary_key"`
+
+	Email    string `gorm:"unique" json:"email"`
+	Nickname string `json:"nickname"`
 	Password string `json:"password"`
-	Active 	bool	`json:"active"`
+	Active   bool   `json:"active"`
 }
 
 func (e *User) Disable() {
