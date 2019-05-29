@@ -7,22 +7,27 @@ import (
 
 type WorkoutExecutionInfo struct {
 	gorm.Model
-	// Define properties
+
+	// References
+	// WorkoutExecutionInfo belongs to one workout
 	WorkoutID int `json:"workoutID"` // Foreign key
-	Workout Workout // the referenced workout - ExecutionInfo belongs to exactly one workout
+	// Workout   Workout // the referenced workout - ExecutionInfo belongs to exactly one workout
+
+	SessionID int // ExecutionInfo references exactly one session. A session can have many workoutInfos
 
 	// Execution parameters - Initially with the workout default settings, changed when done
-	NumberOfSets int `json:"numberOfSets"`
-	NumberOfRepsPerSet int `json:"numberOfRepsPerSet"`
-	LoadDurationMins int `json:"loadDurationMins"`
-	RestDurationBetweenReps int `json:"restDurationBetweenReps"`
-	RestDurationBetweenSets int `json:"restDurationBetweenSets"`
+	NumberOfSets                   int `json:"numberOfSets"`
+	NumberOfRepsPerSet             int `json:"numberOfRepsPerSet"`
+	LoadDurationSeconds            int `json:"loadDurationSeconds"`
+	RestDurationBetweenRepsSeconds int `json:"restDurationBetweenRepsSeconds"`
+	RestDurationBetweenSetsSeconds int `json:"restDurationBetweenSetsSeconds"`
 
 	// Log personal info
-	ExecutedRatioPercent int `json:"executedRatioPercent"`
-	ExhaustionLevelOneToFive int `json:"exhaustionLevelOneToFive"`
-	PersonalRemarks string `json:"personalRemarks"`
-	LessonLearned string `json:"lessonLearned"`
+	IsFinished               bool   `json:"isFinished"`
+	ExecutedRatioPercent     int    `json:"executedRatioPercent"` // Maybe this will be calculated after
+	ExhaustionLevelOneToFive int    `json:"exhaustionLevelOneToFive"`
+	PersonalRemarks          string `json:"personalRemarks"`
+	LessonLearned            string `json:"lessonLearned"`
 }
 
 // DBMigrateWorkoutExecutionInfo will create and migrate the tables, and then make the some relationships if necessary

@@ -9,6 +9,11 @@ import (
 
 type Session struct {
 	gorm.Model
+
+	// References
+	UserID int `json:"workoutID"` // Foreign key
+	// User User // the referenced user - Session belongs to exactly one user
+
 	SessionID             string    `gorm:"unique" json:"sessionID"`
 	StartTime             time.Time `json:"start_time"`
 	WorkoutExecutionInfos []WorkoutExecutionInfo

@@ -20,6 +20,13 @@ type Workout struct {
 	ExperienceLevel   int    `json:"experienceLevel"`
 	Public            bool   `json:"public"`
 	Active            bool   `json:"active"`
+
+	// Default Execution parameters - Initially with these settings, changed when done
+	DefNumberOfSets                   int `json:"defNumberOfSets"`
+	DefNumberOfRepsPerSet             int `json:"defNumberOfRepsPerSet"`
+	DefLoadDurationSeconds            int `json:"defLoadDurationSeconds"`
+	DefRestDurationBetweenRepsSeconds int `json:"defRestDurationBetweenRepsSeconds"`
+	DefRestDurationBetweenSetsSeconds int `json:"defRestDurationBetweenSetsSeconds"`
 }
 
 func (e *Workout) Disable() {
