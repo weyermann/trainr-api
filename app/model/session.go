@@ -16,7 +16,7 @@ type Session struct {
 
 	SessionID             string    `gorm:"unique" json:"sessionID"`
 	StartTime             time.Time `json:"start_time"`
-	WorkoutExecutionInfos []WorkoutExecutionInfo
+	WorkoutExecutionInfos []WorkoutExecution
 }
 
 // DBMigrateSession will create and migrate the tables, and then make the some relationships if necessary
