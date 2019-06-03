@@ -44,6 +44,14 @@ func CreateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	session := model.Session{}
 
 	decoder := json.NewDecoder(r.Body)
+
+	// decoder needs to convert the startTime string into a time object, via parse 
+	// somehow like so:
+	/* 
+	t, err := time.Parse(time.RFC3339, "2006-01-02T15:04:05-07:00")
+	if err != nil {
+		log.Fatal(err)
+	} */
 	if err := decoder.Decode(&session); err != nil {
 		respondError(w, http.StatusBadRequest, err.Error())
 		return

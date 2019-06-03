@@ -1,8 +1,6 @@
 package model
 
 import (
-	"time"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -14,8 +12,8 @@ type Session struct {
 	UserID int `json:"userID"` // Foreign key
 	// User User // the referenced user - Session belongs to exactly one user
 
-	StartTime             time.Time `gorm:"default:current_timestamp" json:"startTime"`
-	WorkoutExecutionInfos []WorkoutExecution
+	StartTime             string             `json:"startTime"` // time is a RFC3393 string.
+	WorkoutExecutionInfos []WorkoutExecution // this is maybe not required
 }
 
 // DBMigrateSession will create and migrate the tables, and then make the some relationships if necessary
