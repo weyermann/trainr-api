@@ -9,8 +9,12 @@ type WorkoutExecution struct {
 	ID int `gorm:"auto_increment, primary_key" json:"id"`
 	// References
 	// WorkoutExecutionInfo belongs to one workout
-	WorkoutID int     `json:"workoutID"` // Foreign key
-	Workout   Workout // the referenced workout: WorkoutExecution belongs to exactly one workout
+	WorkoutID int `json:"workoutID"` // Foreign key
+
+	/* The referenced workout: WorkoutExecution belongs to exactly one workout
+	When this is incommented, a workout object will be sent with the payload
+	*/
+	Workout Workout
 
 	SessionID int `json:"sessionID"` // ExecutionInfo references exactly one session. A session can have many workoutExecutions
 

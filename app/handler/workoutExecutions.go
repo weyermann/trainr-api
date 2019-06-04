@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	// "fmt"
 	"net/http"
 	"strconv"
 
@@ -42,6 +43,7 @@ func GetExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 // CreateWorkout creates a new workout
 func CreateExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	execution := model.WorkoutExecution{}
+	// workout := model.Workout{}
 
 	decoder := json.NewDecoder(r.Body)
 	if err := decoder.Decode(&execution); err != nil {
@@ -50,6 +52,9 @@ func CreateExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
+	// Read from workout Table where ID = execution.WorkoutID
+	db.First(&execution.Workout, execution.WorkoutID)
+
 	if err := db.Save(&execution).Error; err != nil {
 		respondError(w, http.StatusInternalServerError, err.Error())
 		return
@@ -57,7 +62,7 @@ func CreateExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusCreated, execution)
 }
 
-// getSessionOr404 gets a session instance if exists, or respond the 404 error otherwise
+// getExecutionOr404 gets a workout execution instance if exists, or respond the 404 error otherwise
 func getExecutionOr404(db *gorm.DB, executionID int, w http.ResponseWriter, r *http.Request) *model.WorkoutExecution {
 	execution := model.WorkoutExecution{}
 	if err := db.First(&execution, model.WorkoutExecution{ID: executionID}).Error; err != nil {

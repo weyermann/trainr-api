@@ -156,7 +156,7 @@ func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
 // 	handler.DeleteSession(a.DB, w, r)
 // }
 
-// Run the app on it's router
+// Run the app on its router
 func (a *App) Run(host string) {
 	log.Fatal(http.ListenAndServe(host, a.Router))
 }
