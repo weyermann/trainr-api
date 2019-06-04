@@ -40,7 +40,7 @@ func GetExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	respondJSON(w, http.StatusOK, execution)
 }
 
-// CreateWorkout creates a new workout
+// CreateExecution creates a new workout execution and returns the associated workout
 func CreateExecution(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	execution := model.WorkoutExecution{}
 	// workout := model.Workout{}

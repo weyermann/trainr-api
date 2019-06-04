@@ -39,7 +39,7 @@ func CreateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func GetWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID, err := strconv.Atoi(vars["workoutID"])
+	workoutID, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		return
 	}
@@ -54,7 +54,7 @@ func GetWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func UpdateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	workoutID, err := strconv.Atoi(vars["workoutID"])
+	workoutID, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		return
 	}

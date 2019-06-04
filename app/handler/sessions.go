@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -14,21 +15,33 @@ import (
 func GetAllSessions(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	sessions := []model.Session{}
 
-	vars := mux.Vars(r)
-	userID := vars["userID"]
+	// user_id should not be Url, but query param
+	// vars := mux.Vars(r)
+	// userID := vars["user_id"]
+
+	keys, ok := r.URL.Query()["user"]
+    
+    if !ok || len(keys[0]) < 1 {
+        log.Println("Url Param 'key' is missing")
+        return
+    }
+
+    // Query()["key"] will return an array of items, 
+    // we only want the single item.
+    userID := keys[0]
 
 	// Get all sessions matching the user
-	db.Where("userID = ?", userID).Find(&sessions)
-	//// SELECT * FROM users WHERE name = 'jinzhu';
+	db.Where("user_id = ?", userID).Find(&sessions)
+	//// SELECT * FROM sessions WHERE userID = 'xyz';
 
 	respondJSON(w, http.StatusOK, sessions)
 }
 
-// GetSession returns a workout by given workoutID
+// GetSession returns a session by given id
 func GetSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	sessionID, err := strconv.Atoi(vars["sessionID"])
+	sessionID, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		return
 	}
@@ -45,13 +58,13 @@ func CreateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 	decoder := json.NewDecoder(r.Body)
 
-	// decoder needs to convert the startTime string into a time object, via parse 
+	// decoder needs to convert the startTime string into a time object, via parse
 	// somehow like so:
-	/* 
-	t, err := time.Parse(time.RFC3339, "2006-01-02T15:04:05-07:00")
-	if err != nil {
-		log.Fatal(err)
-	} */
+	/*
+		t, err := time.Parse(time.RFC3339, "2006-01-02T15:04:05-07:00")
+		if err != nil {
+			log.Fatal(err)
+		} */
 	if err := decoder.Decode(&session); err != nil {
 		respondError(w, http.StatusBadRequest, err.Error())
 		return
@@ -69,7 +82,7 @@ func CreateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func UpdateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	sessionID, err := strconv.Atoi(vars["sessionID"])
+	sessionID, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		return
 	}
@@ -96,7 +109,7 @@ func UpdateSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 func DeleteSession(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
-	sessionID, err := strconv.Atoi(vars["sessionID"])
+	sessionID, err := strconv.Atoi(vars["id"])
 	if err != nil {
 		return
 	}
