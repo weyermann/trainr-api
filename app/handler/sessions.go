@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -11,28 +11,62 @@ import (
 	"github.com/weyermann/trainr-api/app/model"
 )
 
-// GetAllSessions returns all sessions of a user
-func GetAllSessions(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+// GetAllUserSessions returns all sessions of a user
+func GetAllUserSessions(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	sessions := []model.Session{}
 
-	// user_id should not be Url, but query param
-	// vars := mux.Vars(r)
-	// userID := vars["user_id"]
-
 	keys, ok := r.URL.Query()["user"]
-    
-    if !ok || len(keys[0]) < 1 {
-        log.Println("Url Param 'key' is missing")
-        return
-    }
 
-    // Query()["key"] will return an array of items, 
-    // we only want the single item.
-    userID := keys[0]
+	if !ok || len(keys[0]) < 1 {
+		log.Println("Url Param 'user' is missing")
+		return
+	}
+
+	// Query()["key"] will return an array of items,
+	// we only want the single item.
+	userID := keys[0]
 
 	// Get all sessions matching the user
 	db.Where("user_id = ?", userID).Find(&sessions)
 	//// SELECT * FROM sessions WHERE userID = 'xyz';
+
+	respondJSON(w, http.StatusOK, sessions)
+}
+
+func GetUserSessionsWithDetails(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	sessions := []model.Session{}
+
+	keys, ok := r.URL.Query()["user"]
+
+	if !ok || len(keys[0]) < 1 {
+		log.Println("Url Param 'user' is missing")
+		return
+	}
+
+	// Query() will return an array of items,
+	// we only want the single item.
+	userID := keys[0]
+
+	// Get all sessions matching the user
+	db.Where("user_id = ?", userID).Find(&sessions)
+
+	// Get the workoutExecutions (details) based on their session ID
+	executions := []model.WorkoutExecution{}
+	if len(sessions) > 0 {
+		for i, s := range sessions {
+
+			// Find all workoutExecutions where sessionID = session.ID
+			db.Where("session_id = ?", s.ID).Find(&executions)
+			sessions[i].WorkoutExecutionInfos = executions
+
+			// Read workout details (from workout Table where ID = execution.WorkoutID)
+			if len(sessions[i].WorkoutExecutionInfos) > 0 {
+				for j, t := range sessions[i].WorkoutExecutionInfos {
+					db.First(&sessions[i].WorkoutExecutionInfos[j].Workout, t.WorkoutID)
+				}
+			}
+		}
+	}
 
 	respondJSON(w, http.StatusOK, sessions)
 }

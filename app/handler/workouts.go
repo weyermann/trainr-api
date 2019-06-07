@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -16,6 +17,34 @@ func GetAllWorkouts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 	db.Find(&workouts)
 	respondJSON(w, http.StatusOK, workouts)
 }
+
+func GetPublicWorkouts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	workouts := []model.Workout{}
+	db.Where("public = ?", 1).Find(&workouts)
+	respondJSON(w, http.StatusOK, workouts)
+}
+
+// GetAllWorkouts returns all workouts
+func GetUserWorkouts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
+	workouts := []model.Workout{}
+	// db.Find(&workouts)
+
+	keys, ok := r.URL.Query()["user"]
+
+	if !ok || len(keys[0]) < 1 {
+		log.Println("Url Param 'user' is missing")
+		return
+	}
+	// Query()["key"] will return an array of items,
+	userID := keys[0]
+
+	// Get all workouts matching the user
+	db.Where("user_id = ?", userID).Find(&workouts)
+
+	respondJSON(w, http.StatusOK, workouts)
+}
+
+
 
 // CreateWorkout creates a new workout
 func CreateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {

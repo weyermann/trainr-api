@@ -8,6 +8,9 @@ import (
 type Workout struct {
 	ID int `gorm:"auto_increment, primary_key" json:"id"`
 
+	// References
+	UserID int `json:"userID"` // Foreign key
+
 	WorkoutName       string `gorm:"unique" json:"workoutName"`
 	EnergySystemName  string `json:"energySystemName"`
 	EnergySubtypeName string `json:"energySubtypeName"`

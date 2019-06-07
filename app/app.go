@@ -42,7 +42,9 @@ func (a *App) Initialize(config *config.Config) {
 // Set all required routers
 func (a *App) setRouters() {
 	// Workout
-	a.Get("/workouts", a.GetAllWorkouts) // Workouts per User
+	a.Get("/workouts/all", a.GetAllWorkouts)
+	a.Get("/workouts/public", a.GetPublicWorkouts)
+	a.Get("/workouts", a.GetUserWorkouts) // Workouts per User
 	a.Post("/workouts", a.CreateWorkout)
 	a.Get("/workouts/{id}", a.GetWorkout)
 	a.Put("/workouts/{id}", a.UpdateWorkout)
@@ -51,7 +53,8 @@ func (a *App) setRouters() {
 	a.Put("/workouts/{id}/enable", a.EnableWorkout)
 
 	// Session
-	a.Get("/sessions", a.GetAllSessions) // Sessions per User
+	a.Get("/sessions", a.GetAllUserSessions)                 // Sessions per User
+	a.Get("/sessions/details", a.GetUserSessionsWithDetails) // Sessions per User
 	a.Post("/sessions", a.CreateSession)
 	a.Get("/sessions/{id}", a.GetSession)
 	a.Put("/sessions/{id}", a.UpdateSession)
@@ -90,6 +93,15 @@ func (a *App) GetAllWorkouts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllWorkouts(a.DB, w, r)
 }
 
+// Handlers to manage Workout Data
+func (a *App) GetPublicWorkouts(w http.ResponseWriter, r *http.Request) {
+	handler.GetPublicWorkouts(a.DB, w, r)
+}
+
+func (a *App) GetUserWorkouts(w http.ResponseWriter, r *http.Request) {
+	handler.GetUserWorkouts(a.DB, w, r)
+}
+
 func (a *App) CreateWorkout(w http.ResponseWriter, r *http.Request) {
 	handler.CreateWorkout(a.DB, w, r)
 }
@@ -115,8 +127,12 @@ func (a *App) EnableWorkout(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handlers to manage Session Data
-func (a *App) GetAllSessions(w http.ResponseWriter, r *http.Request) {
-	handler.GetAllSessions(a.DB, w, r)
+func (a *App) GetAllUserSessions(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllUserSessions(a.DB, w, r)
+}
+
+func (a *App) GetUserSessionsWithDetails(w http.ResponseWriter, r *http.Request) {
+	handler.GetUserSessionsWithDetails(a.DB, w, r)
 }
 
 func (a *App) CreateSession(w http.ResponseWriter, r *http.Request) {
