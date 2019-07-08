@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	"github.com/weyermann/trainr-api/app/handler"
@@ -174,5 +175,7 @@ func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
 
 // Run the app on its router
 func (a *App) Run(host string) {
-	log.Fatal(http.ListenAndServe(host, a.Router))
+	// https://www.thepolyglotdeveloper.com/2017/10/handling-cors-golang-web-application/
+	log.Fatal(http.ListenAndServe(host, handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(a.Router)))
+	// log.Fatal(http.ListenAndServe(":3000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }

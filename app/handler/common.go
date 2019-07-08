@@ -1,10 +1,10 @@
 package handler
- 
+
 import (
 	"encoding/json"
 	"net/http"
 )
- 
+
 // respondJSON makes the response with payload as json format
 func respondJSON(w http.ResponseWriter, status int, payload interface{}) {
 	response, err := json.Marshal(payload)
@@ -14,10 +14,11 @@ func respondJSON(w http.ResponseWriter, status int, payload interface{}) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
+	// enableCors(&w)
 	w.WriteHeader(status)
 	w.Write([]byte(response))
 }
- 
+
 // respondError makes the error response with payload as json format
 func respondError(w http.ResponseWriter, code int, message string) {
 	respondJSON(w, code, map[string]string{"error": message})
