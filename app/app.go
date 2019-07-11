@@ -36,6 +36,8 @@ func (a *App) Initialize(config *config.Config) {
 	a.DB = model.DBMigrateUser(db)
 	a.DB = model.DBMigrateSession(db)
 	a.DB = model.DBMigrateWorkoutExecution(db)
+	// a.DB = model.DBMigrateWorkoutFacility(db)
+	a.DB = model.DBMigrateFacility(db)
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
@@ -176,6 +178,6 @@ func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
 // Run the app on its router
 func (a *App) Run(host string) {
 	// https://www.thepolyglotdeveloper.com/2017/10/handling-cors-golang-web-application/
-	log.Fatal(http.ListenAndServe(host, handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(a.Router)))
+	log.Fatal(http.ListenAndServe(host, handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(a.Router)))
 	// log.Fatal(http.ListenAndServe(":3000", handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}), handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}), handlers.AllowedOrigins([]string{"*"}))(router)))
 }

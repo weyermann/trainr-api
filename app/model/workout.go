@@ -11,14 +11,17 @@ type Workout struct {
 	// References
 	UserID int `json:"userID"` // Foreign key
 
+	Facilities []Facility `gorm:"many2many:workout_facilities" json:"facilities"` // it might make sense to store complete facility objects when the user
+	// is allowed to create his own facility types.
+
+	// FacilityIDs []int `gorm:"many2many:workout_facilities" json:"facilities"` // Not working
+
 	WorkoutName       string `gorm:"unique" json:"workoutName"`
 	EnergySystemName  string `json:"energySystemName"`
 	EnergySubtypeName string `json:"energySubtypeName"`
 	Synopsis          string `json:"synopsis"`
 	ShortDescription  string `json:"shortDescription"`
 	LongDescription   string `json:"longDescription"`
-	Facility          string `json:"facility"`
-	FacilityOpt       string `json:"facility_opt"`
 	Duration          int    `json:"duration"`
 	ExperienceLevel   int    `json:"experienceLevel"`
 	Public            bool   `json:"public"`
