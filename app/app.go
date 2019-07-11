@@ -69,6 +69,9 @@ func (a *App) setRouters() {
 	a.Get("/executions/{id}", a.GetExecution)
 	// a.Put("/executions/{id}", a.UpdateExecution)
 	// a.Delete("/executions/{id}", a.DeleteExecution)
+
+	// Lists
+	a.Get("/list/facilities", a.GetAllFacilities)  	
 }
 
 // Wrap the router for GET method
@@ -91,12 +94,12 @@ func (a *App) Delete(path string, f func(w http.ResponseWriter, r *http.Request)
 	a.Router.HandleFunc(path, f).Methods("DELETE")
 }
 
+
 // Handlers to manage Workout Data
 func (a *App) GetAllWorkouts(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllWorkouts(a.DB, w, r)
 }
 
-// Handlers to manage Workout Data
 func (a *App) GetPublicWorkouts(w http.ResponseWriter, r *http.Request) {
 	handler.GetPublicWorkouts(a.DB, w, r)
 }
@@ -129,6 +132,7 @@ func (a *App) EnableWorkout(w http.ResponseWriter, r *http.Request) {
 	handler.EnableWorkout(a.DB, w, r)
 }
 
+
 // Handlers to manage Session Data
 func (a *App) GetAllUserSessions(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllUserSessions(a.DB, w, r)
@@ -154,6 +158,7 @@ func (a *App) DeleteSession(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteSession(a.DB, w, r)
 }
 
+
 // Handlers to manage Execution Data
 func (a *App) GetAllExecutions(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllExecutions(a.DB, w, r)
@@ -167,13 +172,12 @@ func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
 	handler.GetExecution(a.DB, w, r)
 }
 
-// func (a *App) UpdateSession(w http.ResponseWriter, r *http.Request) {
-// 	handler.UpdateSession(a.DB, w, r)
-// }
 
-// func (a *App) DeleteSession(w http.ResponseWriter, r *http.Request) {
-// 	handler.DeleteSession(a.DB, w, r)
-// }
+
+// Handlers to manage List Data
+func (a *App) GetAllFacilities(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllFacilities(a.DB, w, r)
+}
 
 // Run the app on its router
 func (a *App) Run(host string) {
