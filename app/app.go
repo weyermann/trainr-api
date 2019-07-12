@@ -38,6 +38,7 @@ func (a *App) Initialize(config *config.Config) {
 	a.DB = model.DBMigrateWorkoutExecution(db)
 	// a.DB = model.DBMigrateWorkoutFacility(db)
 	a.DB = model.DBMigrateFacility(db)
+	a.DB = model.DBMigrateLists(db)
 	a.Router = mux.NewRouter()
 	a.setRouters()
 }
@@ -71,7 +72,9 @@ func (a *App) setRouters() {
 	// a.Delete("/executions/{id}", a.DeleteExecution)
 
 	// Lists
-	a.Get("/list/facilities", a.GetAllFacilities)  	
+	a.Get("/list/facilities", a.GetAllFacilities)
+	a.Get("/list/energysystems", a.GetAllEnergySystems)
+	a.Get("/list/experiencelevels", a.GetAllExperienceLevels)
 }
 
 // Wrap the router for GET method
@@ -93,7 +96,6 @@ func (a *App) Put(path string, f func(w http.ResponseWriter, r *http.Request)) {
 func (a *App) Delete(path string, f func(w http.ResponseWriter, r *http.Request)) {
 	a.Router.HandleFunc(path, f).Methods("DELETE")
 }
-
 
 // Handlers to manage Workout Data
 func (a *App) GetAllWorkouts(w http.ResponseWriter, r *http.Request) {
@@ -132,7 +134,6 @@ func (a *App) EnableWorkout(w http.ResponseWriter, r *http.Request) {
 	handler.EnableWorkout(a.DB, w, r)
 }
 
-
 // Handlers to manage Session Data
 func (a *App) GetAllUserSessions(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllUserSessions(a.DB, w, r)
@@ -158,7 +159,6 @@ func (a *App) DeleteSession(w http.ResponseWriter, r *http.Request) {
 	handler.DeleteSession(a.DB, w, r)
 }
 
-
 // Handlers to manage Execution Data
 func (a *App) GetAllExecutions(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllExecutions(a.DB, w, r)
@@ -172,11 +172,17 @@ func (a *App) GetExecution(w http.ResponseWriter, r *http.Request) {
 	handler.GetExecution(a.DB, w, r)
 }
 
-
-
 // Handlers to manage List Data
 func (a *App) GetAllFacilities(w http.ResponseWriter, r *http.Request) {
 	handler.GetAllFacilities(a.DB, w, r)
+}
+
+func (a *App) GetAllEnergySystems(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllEnergySystems(a.DB, w, r)
+}
+
+func (a *App) GetAllExperienceLevels(w http.ResponseWriter, r *http.Request) {
+	handler.GetAllExperienceLevels(a.DB, w, r)
 }
 
 // Run the app on its router

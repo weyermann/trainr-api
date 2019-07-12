@@ -16,9 +16,9 @@ type Workout struct {
 
 	// FacilityIDs []int `gorm:"many2many:workout_facilities" json:"facilities"` // Not working
 
-	WorkoutName       string `gorm:"unique" json:"workoutName"`
-	EnergySystemName  string `json:"energySystemName"`
-	EnergySubtypeName string `json:"energySubtypeName"`
+	WorkoutName       string `json:"workoutName"`
+	EnergySystemName  int    `json:"energySystem"`
+	EnergySubtypeName int    `json:"energySubtype"`
 	Synopsis          string `json:"synopsis"`
 	ShortDescription  string `json:"shortDescription"`
 	LongDescription   string `json:"longDescription"`

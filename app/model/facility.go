@@ -6,11 +6,11 @@ import (
 )
 
 type Facility struct {
-	ID   int    `gorm:"auto_increment, primary_key" json:"id"`
-	Name string `json:"name"` // Foreign key
+	ID          int    `gorm:"auto_increment, primary_key" json:"id"`
+	Description string `json:"description"` // Foreign key
 }
 
-// DBMigrateSession will create and migrate the tables, and then make the some relationships if necessary
+// DBMigrateFacility will create and migrate the tables, and then make the some relationships if necessary
 func DBMigrateFacility(db *gorm.DB) *gorm.DB {
 	db.AutoMigrate(&Facility{})
 	return db
