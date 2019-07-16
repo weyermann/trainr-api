@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -43,8 +43,6 @@ func GetUserWorkouts(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 
 	respondJSON(w, http.StatusOK, workouts)
 }
-
-
 
 // CreateWorkout creates a new workout
 func CreateWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
@@ -168,7 +166,7 @@ func EnableWorkout(db *gorm.DB, w http.ResponseWriter, r *http.Request) {
 // getWorkoutOr404 gets a workout instance if exists, or respond the 404 error otherwise
 func getWorkoutOr404(db *gorm.DB, workoutID int, w http.ResponseWriter, r *http.Request) *model.Workout {
 	workout := model.Workout{}
-	if err := db.First(&workout, model.Workout{ID: workoutID}).Error; err != nil {
+	if err := db.First(&workout, model.Workout{ID: workoutID}).Related(&workout.Facilities, "facilities").Error; err != nil {
 		respondError(w, http.StatusNotFound, err.Error())
 		return nil
 	}
